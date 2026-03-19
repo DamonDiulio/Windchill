@@ -4,9 +4,13 @@
 using namespace std;
 
 //Define Functions
+// Input Function
 void input (double& temperature, double& windSpeed, double& dewPoint);
+// Calculates Wind Chill
 double calc_wind_chill (double& temperature, double& windSpeed, double& windChill);
+// Calculates Cloud Base
 double calc_cloud_base (double& temperature, double& dewPoint, double& cloudBase);
+// Output Function
 void output (double& windChill, double& cloudBase);
 
 int main() {
