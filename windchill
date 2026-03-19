@@ -3,62 +3,74 @@
 #include <limits>
 using namespace std;
 
-void getTemperature(double &temperature) {
-    cout << "Enter temperature (F): ";
-    cin >> temperature;
-
-    while (cin.fail() || temperature < -150 || temperature > 150) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid input. Temperature must be between -150 and 150 F. Try again: ";
-        cin >> temperature;
-    }
-}
-
-void getWindSpeed(double &windSpeed) {
-    cout << "Enter wind speed (mph): ";
-    cin >> windSpeed;
-
-    while (cin.fail() || windSpeed < 0) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid input. Wind speed cannot be negative. Try again: ";
-        cin >> windSpeed;
-    }
-}
-
-void getDewPoint(double temperature, double &dewPoint) {
-    cout << "Enter dew point (F): ";
-    cin >> dewPoint;
-
-    while (cin.fail() || dewPoint > temperature || dewPoint < -150 || dewPoint > 150) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Invalid input. Dew point must be between -150 and 150 and not greater than temperature. Try again: ";
-        cin >> dewPoint;
-    }
-}
+void input (double& temperature, double& windSpeed, double& dewPoint);
+double calc_wind_chill (double& temperature, double& windSpeed, double& windChill);
+double calc_cloud_base (double& temperature, double& dewPoint, double& cloudBase);
+void output (double& windChill, double& cloudBase);
 
 int main() {
-    double temperature, windSpeed, dewPoint;
+	
+	// Variables
+	double temperature, windSpeed, dewPoint, windChill, cloudBase;
 
-    getTemperature(temperature);
-    getWindSpeed(windSpeed);
-    getDewPoint(temperature, dewPoint);
+	// Funct
+	input (temperature, windSpeed, dewPoint);
+	calc_wind_chill (temperature, windSpeed, windChill);
+	calc_cloud_base (temperature, dewPoint, cloudBase);
+	output (windChill, cloudBase);
+	
+	return 0;
+}
 
-    double cloudBase = (temperature - dewPoint) * 222;
-    cout << "\nEstimated Cloud Base: " << cloudBase << " ft\n";
+void input (double& temperature, double& windSpeed, double& dewPoint) {
 
-    if (temperature <= 50 && windSpeed >= 3) {
-        double windChill = 35.74 + (0.6215 * temperature)
-            - (35.75 * pow(windSpeed, 0.16))
-            + (0.4275 * temperature * pow(windSpeed, 0.16));
+	cout << "Enter temperature (F): ";
+	cin >> temperature;
 
-        cout << "Wind Chill: " << windChill << " F\n";
-    }
-    else {
-        cout << "Wind chill not applicable.\n";
-    }
+	while (cin.fail() || temperature < -150 || temperature > 150) {
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Invalid input. Temperature must be between -150 and 150 F. Try again: ";
+		cin >> temperature;
+	}
 
+
+	{
+		cout << "Enter wind speed (mph): ";
+		cin >> windSpeed;
+
+		while (cin.fail() || windSpeed < 0) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid input. Wind speed cannot be negative. Try again: ";
+			cin >> windSpeed;
+		}
+	}
+
+	{
+		cout << "Enter dew point (F): ";
+		cin >> dewPoint;
+
+		while (cin.fail() || dewPoint > temperature || dewPoint < -150 || dewPoint > 150) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid input. Dew point must be between -150 and 150 and not greater than temperature. Try again: ";
+			cin >> dewPoint;
+		}
+	}
+}
+
+double calc_wind_chill (double& temperature, double& windSpeed, double& windChill) {
+	windChill = 35.74 + (0.6215 * temperature) - (35.75 * pow(windSpeed, 0.16)) + (0.4275 * temperature * pow(windSpeed, 0.16));
+	return 0;
+}
+
+double calc_cloud_base (double& temperature, double& dewPoint, double& cloudBase) {
+    cloudBase = 1000 * ((temperature - dewPoint)/4.4);
     return 0;
+}
+
+void output (double& windChill, double& cloudBase) {
+cout << "Wind Cill is:" << windChill << "F\n";
+cout << "Cloudbase is:" << cloudBase << "ft";
 }
