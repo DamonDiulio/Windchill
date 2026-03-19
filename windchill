@@ -3,6 +3,7 @@
 #include <limits>
 using namespace std;
 
+//Define Functions
 void input (double& temperature, double& windSpeed, double& dewPoint);
 double calc_wind_chill (double& temperature, double& windSpeed, double& windChill);
 double calc_cloud_base (double& temperature, double& dewPoint, double& cloudBase);
@@ -10,10 +11,10 @@ void output (double& windChill, double& cloudBase);
 
 int main() {
 	
-	// Variables
+	// Variables for temp, wind speed, dew point, wind chill, and cloud base
 	double temperature, windSpeed, dewPoint, windChill, cloudBase;
 
-	// Funct
+	// Function calling order
 	input (temperature, windSpeed, dewPoint);
 	calc_wind_chill (temperature, windSpeed, windChill);
 	calc_cloud_base (temperature, dewPoint, cloudBase);
@@ -22,11 +23,14 @@ int main() {
 	return 0;
 }
 
+// User inputs values here
 void input (double& temperature, double& windSpeed, double& dewPoint) {
 
+    // Input temperature
 	cout << "Enter temperature (F): ";
 	cin >> temperature;
 
+    //If fail, output invalid
 	while (cin.fail() || temperature < -150 || temperature > 150) {
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -36,6 +40,7 @@ void input (double& temperature, double& windSpeed, double& dewPoint) {
 
 
 	{
+	    // Input wind speed
 		cout << "Enter wind speed (mph): ";
 		cin >> windSpeed;
 
@@ -48,29 +53,26 @@ void input (double& temperature, double& windSpeed, double& dewPoint) {
 	}
 
 	{
+	    // Input dew point
 		cout << "Enter dew point (F): ";
 		cin >> dewPoint;
-
-		while (cin.fail() || dewPoint > temperature || dewPoint < -150 || dewPoint > 150) {
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Invalid input. Dew point must be between -150 and 150 and not greater than temperature. Try again: ";
-			cin >> dewPoint;
 		}
-	}
 }
 
+// calculates wind chill based on temp input and wind speed input
 double calc_wind_chill (double& temperature, double& windSpeed, double& windChill) {
 	windChill = 35.74 + (0.6215 * temperature) - (35.75 * pow(windSpeed, 0.16)) + (0.4275 * temperature * pow(windSpeed, 0.16));
 	return 0;
 }
 
+// Calculates cloud base height based on temp input, and dew point input
 double calc_cloud_base (double& temperature, double& dewPoint, double& cloudBase) {
     cloudBase = 1000 * ((temperature - dewPoint)/4.4);
     return 0;
 }
 
+// Output wind chill and cloud base
 void output (double& windChill, double& cloudBase) {
-cout << "Wind Cill is:" << windChill << "F\n";
+cout << "Wind Chill is:" << windChill << "F\n";
 cout << "Cloudbase is:" << cloudBase << "ft";
 }
