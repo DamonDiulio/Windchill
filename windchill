@@ -19,9 +19,13 @@ int main() {
 	double temperature, windSpeed, dewPoint, windChill, cloudBase;
 
 	// Function calling order
+// input for temperature, wind speed, and dew point
 	input (temperature, windSpeed, dewPoint);
+// this calculates the wind chill
 	calc_wind_chill (temperature, windSpeed, windChill);
+// this calculates the cloud base
 	calc_cloud_base (temperature, dewPoint, cloudBase);
+// the outputs the wind chill and cloud base
 	output (windChill, cloudBase);
 	
 	return 0;
